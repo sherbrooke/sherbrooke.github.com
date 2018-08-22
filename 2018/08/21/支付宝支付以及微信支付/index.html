@@ -239,7 +239,7 @@
 
     
         <meta property="article:published_time" content="Tue Aug 21 2018 00:00:00 GMT+0800">
-        <meta property="article:modified_time" content="Wed Aug 22 2018 11:32:51 GMT+0800">
+        <meta property="article:modified_time" content="Wed Aug 22 2018 12:03:00 GMT+0800">
     
 
     <!-- The Twitter Card protocol -->
@@ -262,7 +262,7 @@
     "mainEntityOfPage": "http://sherbrooke.work/2018/08/21/支付宝支付以及微信支付/index.html",
     "headline": "支付宝支付以及微信支付",
     "datePublished": "Tue Aug 21 2018 00:00:00 GMT+0800",
-    "dateModified": "Wed Aug 22 2018 11:32:51 GMT+0800",
+    "dateModified": "Wed Aug 22 2018 12:03:00 GMT+0800",
     "author": {
         "@type": "Person",
         "name": "Sher",
@@ -495,7 +495,7 @@
 <p><a href="https://openclub.alipay.com/read.php?tid=276&amp;fid=25" target="_blank" rel="noopener">https://openclub.alipay.com/read.php?tid=276&amp;fid=25</a><br>然后我们设置一下应用公钥<br><img src="http://7xsnoe.com1.z0.glb.clouddn.com/blog/180821/JADdDjBJ8k.png" alt="mark"><br>使用这个地址的工具生成上面的公钥<a href="https://gw.alipayobjects.com/os/rmsportal/PpisHyUkzJnZltrPyfuD.zip" target="_blank" rel="noopener">https://gw.alipayobjects.com/os/rmsportal/PpisHyUkzJnZltrPyfuD.zip</a><br>使用的时候注意选择PKCS8和2048<br>点生成密钥，可以看到这里生成有公钥和私钥，公钥我们填写到支付宝开放平台，私钥保存后面使用<br>到这里基本就配置完了，现在我们取一下我们需要的信息<br>1、商户应用私钥 –上面的步骤可以拿到<br>先进这个页面<br><img src="http://7xsnoe.com1.z0.glb.clouddn.com/blog/180821/BC21c5EBj8.png" alt="mark"><br>2、AppId – 上面的页面就可以看到AppId<br><img src="http://7xsnoe.com1.z0.glb.clouddn.com/blog/180821/BC21c5EBj8.png" alt="mark"><br>3、PID – 进入上面的页面可以看到<br>4、MD5 – 进入上面的页面可以看到<br><img src="http://7xsnoe.com1.z0.glb.clouddn.com/blog/180821/LA8K2GFdhd.png" alt="mark"><br>5、支付宝公钥 – 上面的页面可以看到</p>
 <h3 id="2、APP中支付"><a href="#2、APP中支付" class="headerlink" title="2、APP中支付"></a>2、APP中支付</h3><p>支付的代码在提供的demo（<a href="https://docs.open.alipay.com/54/104509/）里面写的非常清楚，这里就只简单介绍一下流程和注意事项" target="_blank" rel="noopener">https://docs.open.alipay.com/54/104509/）里面写的非常清楚，这里就只简单介绍一下流程和注意事项</a><br><img src="http://7xsnoe.com1.z0.glb.clouddn.com/blog/180821/Aga8aB08Dm.png" alt="mark">首先构造订单参数，然后按照demo里面的方法拼接成字符串（注意是需要排序的）然后再加签，注意放在服务端，将生成的签名拼在之前拼接好的字符串<br>然后就可以用支付宝的api去调用了（注意在子线程调用），根据返回的信息就可以判断支付是否成功<img src="http://7xsnoe.com1.z0.glb.clouddn.com/blog/180821/Cm8Ggbc9A8.png" alt="mark"></p>
 <h1 id="微信支付"><a href="#微信支付" class="headerlink" title="微信支付"></a>微信支付</h1><h2 id="微信开放平台申请"><a href="#微信开放平台申请" class="headerlink" title="微信开放平台申请"></a>微信开放平台申请</h2><h3 id="1、微信支付首先需要在微信开放平台创建应用"><a href="#1、微信支付首先需要在微信开放平台创建应用" class="headerlink" title="1、微信支付首先需要在微信开放平台创建应用"></a>1、微信支付首先需要在微信开放平台创建应用</h3><p>首先进入<a href="http://open.weixin.qq.com，登录之后进入管理中心，点击创建移动应用" target="_blank" rel="noopener">http://open.weixin.qq.com，登录之后进入管理中心，点击创建移动应用</a><br><img src="http://7xsnoe.com1.z0.glb.clouddn.com/blog/180822/GaCGkLmbIJ.png" alt="mark"><br>填写完对应的信息之后会进行审核，审核通过之后，申请开通微信支付接口（这部分需要开发者资质认证，收费的），点击开通，填写相关的资料信息<br>，申请之后会在邮箱收到对应的商户信息<img src="http://7xsnoe.com1.z0.glb.clouddn.com/blog/180822/5BJFfi2bcH.png" alt="mark">注意保存好邮件，后面会用到，邮件里面还会给个下载api证书，配置api密钥的按钮，点击进入，下载一下api证书，然后如果没有安装操作证书，在个人设置里面按照提示步骤安装一下，然后设置一下api密钥，这里随机生成一个32位的带大小写字母和数字的字符串就行。<br>到这里基本就配置完了，现在我们取一下我们需要的信息<br>1、AppId – 邮件里面有<br>2、商户号 – 邮件<br>3、api密钥 – 刚刚填写的<br>4、api证书 – 刚刚下载的，退款时需要<br>5、签名 – 创建应用的时候填写的应用签名 需要和app的签名一致</p>
-<h3 id="2、APP支付"><a href="#2、APP支付" class="headerlink" title="2、APP支付"></a>2、APP支付</h3><p>微信支付的demo比较老了，所以要参考的话会比较难懂，不过流程清楚的话其实也不算难<br>首先也是一样构造订单参数，然后将订单的参数给到服务端（排序），服务端先将订单加签得到签名<a href="https://pay.weixin.qq.com/wiki/doc/api/app/app.php?chapter=4_3，然后将签名也放到请求参数去获取预支付订单，具体需要的参数参考https://pay.weixin.qq.com/wiki/doc/api/app/app.php?chapter=9_1，然后服务端将拿到的参数返回给客户端，客户端拿到这些参数调用如下代码![mark](http://7xsnoe.com1.z0.glb.clouddn.com/blog/180822/0d1K5fb50f.png)，然后我们在实现了IWXAPIEventHandler接口的WXPayEntryActivity类的onResp接口![mark](http://7xsnoe.com1.z0.glb.clouddn.com/blog/180822/AFbhmhHj9J.png)根据回调的resp就可以看到是否支付成功，另外支付的时候注意签名和WXPayEntryActivity的位置，如果有错也是调不起微信的。" target="_blank" rel="noopener">https://pay.weixin.qq.com/wiki/doc/api/app/app.php?chapter=4_3，然后将签名也放到请求参数去获取预支付订单，具体需要的参数参考https://pay.weixin.qq.com/wiki/doc/api/app/app.php?chapter=9_1，然后服务端将拿到的参数返回给客户端，客户端拿到这些参数调用如下代码![mark](http://7xsnoe.com1.z0.glb.clouddn.com/blog/180822/0d1K5fb50f.png)，然后我们在实现了IWXAPIEventHandler接口的WXPayEntryActivity类的onResp接口![mark](http://7xsnoe.com1.z0.glb.clouddn.com/blog/180822/AFbhmhHj9J.png)根据回调的resp就可以看到是否支付成功，另外支付的时候注意签名和WXPayEntryActivity的位置，如果有错也是调不起微信的。</a><br>微信支付的话，可能服务端加签的方式和请求的参数比较难懂，需要重点注意。签名的时候，参数名要排序并以&amp;拼接为字符串，并且还要拼接appi密钥，然后md5加密之后大写。请求的时候参数注意要生成为xml文件再提交。    </p>
+<h3 id="2、APP支付"><a href="#2、APP支付" class="headerlink" title="2、APP支付"></a>2、APP支付</h3><p>微信支付的demo比较老了，所以要参考的话会比较难懂，不过流程清楚的话其实也不算难<br>首先也是一样构造订单参数，然后将订单的参数给到服务端（排序），服务端先将订单加签得到签名 <a href="https://pay.weixin.qq.com/wiki/doc/api/app/app.php?chapter=4_3" target="_blank" rel="noopener">https://pay.weixin.qq.com/wiki/doc/api/app/app.php?chapter=4_3</a> ，然后将签名也放到请求参数去获取预支付订单，具体需要的参数参考 <a href="https://pay.weixin.qq.com/wiki/doc/api/app/app.php?chapter=9_1" target="_blank" rel="noopener">https://pay.weixin.qq.com/wiki/doc/api/app/app.php?chapter=9_1</a> ，然后服务端将拿到的参数返回给客户端，客户端拿到这些参数调用如下代码<img src="http://7xsnoe.com1.z0.glb.clouddn.com/blog/180822/0d1K5fb50f.png" alt="mark">，然后我们在实现了IWXAPIEventHandler接口的WXPayEntryActivity类的onResp接口<img src="http://7xsnoe.com1.z0.glb.clouddn.com/blog/180822/AFbhmhHj9J.png" alt="mark">根据回调的resp就可以看到是否支付成功，另外支付的时候注意签名和WXPayEntryActivity的位置，如果有错也是调不起微信的。<br>微信支付的话，可能服务端加签的方式和请求的参数比较难懂，需要重点注意。签名的时候，参数名要排序并以&amp;拼接为字符串，并且还要拼接appi密钥，然后md5加密之后大写。请求的时候参数注意要生成为xml文件再提交。    </p>
 
         
     
@@ -522,7 +522,7 @@
 
     <!-- Next Nav -->
     
-        <a href="/2018/04/01/Python爬取网易云音乐排行榜数据/" id="post_nav-older" class="next-content">
+        <a href="/2018/05/01/微博_QQ_微信分享和登录/" id="post_nav-older" class="next-content">
             旧篇
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white mdl-color-text--grey-900" role="presentation">
@@ -614,7 +614,7 @@
             </a>
             <ul class="dropdown-menu">
             <li>
-                <a class="sidebar_archives-link" href="/archives/2018/08/">八月 2018<span class="sidebar_archives-count">1</span></a></li><li><a class="sidebar_archives-link" href="/archives/2018/04/">四月 2018<span class="sidebar_archives-count">1</span></a></li><li><a class="sidebar_archives-link" href="/archives/2018/03/">三月 2018<span class="sidebar_archives-count">1</span></a></li><li><a class="sidebar_archives-link" href="/archives/2017/09/">九月 2017<span class="sidebar_archives-count">1</span></a></li><li><a class="sidebar_archives-link" href="/archives/2016/03/">三月 2016<span class="sidebar_archives-count">1</span></a></li><li><a class="sidebar_archives-link" href="/archives/2016/01/">一月 2016<span class="sidebar_archives-count">2</span></a>
+                <a class="sidebar_archives-link" href="/archives/2018/08/">八月 2018<span class="sidebar_archives-count">1</span></a></li><li><a class="sidebar_archives-link" href="/archives/2018/05/">五月 2018<span class="sidebar_archives-count">1</span></a></li><li><a class="sidebar_archives-link" href="/archives/2018/04/">四月 2018<span class="sidebar_archives-count">1</span></a></li><li><a class="sidebar_archives-link" href="/archives/2018/03/">三月 2018<span class="sidebar_archives-count">1</span></a></li><li><a class="sidebar_archives-link" href="/archives/2017/09/">九月 2017<span class="sidebar_archives-count">1</span></a></li><li><a class="sidebar_archives-link" href="/archives/2016/03/">三月 2016<span class="sidebar_archives-count">1</span></a></li><li><a class="sidebar_archives-link" href="/archives/2016/01/">一月 2016<span class="sidebar_archives-count">2</span></a>
             </ul>
         </li>
         
