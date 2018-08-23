@@ -239,7 +239,7 @@
 
     
         <meta property="article:published_time" content="Tue May 01 2018 00:00:00 GMT+0800">
-        <meta property="article:modified_time" content="Thu Aug 23 2018 12:30:59 GMT+0800">
+        <meta property="article:modified_time" content="Thu Aug 23 2018 12:33:56 GMT+0800">
     
 
     <!-- The Twitter Card protocol -->
@@ -262,7 +262,7 @@
     "mainEntityOfPage": "http://sherbrooke.work/2018/05/01/微博_QQ_微信分享和登录/index.html",
     "headline": "安卓常用第三方平台的分享以及登录",
     "datePublished": "Tue May 01 2018 00:00:00 GMT+0800",
-    "dateModified": "Thu Aug 23 2018 12:30:59 GMT+0800",
+    "dateModified": "Thu Aug 23 2018 12:33:56 GMT+0800",
     "author": {
         "@type": "Person",
         "name": "Sher",
@@ -511,7 +511,30 @@
        mSsoHandler.authorizeCallBack(requestCode, resultCode, data);
    }
 </code></pre><p>有了上面的token，就可以从token里面拿到access_token和uid，从而获取用户资料，具体的接口参考<a href="http://open.weibo.com/wiki/2/users/show" target="_blank" rel="noopener">http://open.weibo.com/wiki/2/users/show</a></p>
-<h2 id="微博分享"><a href="#微博分享" class="headerlink" title="微博分享"></a>微博分享</h2><p>微博可以分享文本，单图，多图，网页（链接的形式，目前测试好像分享不出去，如果要分享链接的话，直接将链接拼接在文本后面）和视频<br><img src="http://7xsnoe.com1.z0.glb.clouddn.com/blog/180822/j3EhFdGjHl.png" alt="mark"><br>在onNewIntent方法调用的接口是用于处理回调的，记得要调用。<br>具体的构造各种类型参数的方法如下</p>
+<h2 id="微博分享"><a href="#微博分享" class="headerlink" title="微博分享"></a>微博分享</h2><p>微博可以分享文本，单图，多图，网页（链接的形式，目前测试好像分享不出去，如果要分享链接的话，直接将链接拼接在文本后面）和视频</p>
+<pre><code>AuthInfo mAuthInfo = new AuthInfo(this, APP_KEY, REDIRECT_URL, &quot;&quot;);
+    WbSdk.install(this,mAuthInfo);
+//        mSsoHandler = new SsoHandler(this);
+//
+//        mSsoHandler.authorize(this);
+    wbShareHandler = new WbShareHandler(this);
+    wbShareHandler.registerApp();
+
+    WeiboMultiMessage message = new WeiboMultiMessage();
+    message.textObject = getTextObj();
+    message.imageObject = getImageObj();
+//        message.mediaObject = getWebpageObj();
+    message.multiImageObject = getMultiImageObject();
+    message.videoSourceObject = getVideoObject();
+    wbShareHandler.shareMessage(message,false);
+}
+
+@Override
+protected void onNewIntent(Intent intent) {
+    super.onNewIntent(intent);
+    wbShareHandler.doResultIntent(intent,this);
+}
+</code></pre><p>在onNewIntent方法调用的接口是用于处理回调的，记得要调用。<br>具体的构造各种类型参数的方法如下</p>
 <pre><code>/**
  * 创建文本消息对象。
  * @return 文本消息对象。
@@ -598,7 +621,7 @@ android:configChanges=&quot;orientation|keyboardHidden|screenSize&quot;
 <pre><code>Tencent.onActivityResultData(requestCode,resultCode,data,listener);
 </code></pre><h2 id="QQ授权"><a href="#QQ授权" class="headerlink" title="QQ授权"></a>QQ授权</h2><p>授权的代码很简单，this代表本上面实现的IUiListener接口</p>
 <pre><code>mTencent.login(this, &quot;all&quot;, this);
-</code></pre><p>然后在上面实现的回调类的OnComplete方法就可以根据参数拿到OpenId， AccessToken参数<br>如果要获取详细的用户信息，我们直接请求这个地址去获取<br><a href="https://graph.qq.com/user/get_user_info?access_token=***&amp;oauth_consumer_key=***&amp;openid=***，注意将token，oauth_consumer_key（自己的appid），openid换成自己的，这些可以从上面的授权里面拿到" target="_blank" rel="noopener">https://graph.qq.com/user/get_user_info?access_token=***&amp;oauth_consumer_key=***&amp;openid=***，注意将token，oauth_consumer_key（自己的appid），openid换成自己的，这些可以从上面的授权里面拿到</a></p>
+</code></pre><p>然后在上面实现的回调类的OnComplete方法就可以根据参数拿到OpenId， AccessToken参数<br>如果要获取详细的用户信息，我们直接请求这个地址去获取 &lt;<br><a href="https://graph.qq.com/user/get_user_info?access_token=***&amp;oauth_consumer_key=***&amp;openid=**" target="_blank" rel="noopener">https://graph.qq.com/user/get_user_info?access_token=***&amp;oauth_consumer_key=***&amp;openid=**</a>* &gt; ，注意将token，oauth_consumer_key（自己的appid），openid换成自己的，这些可以从上面的授权里面拿到</p>
 <h2 id="QQ分享"><a href="#QQ分享" class="headerlink" title="QQ分享"></a>QQ分享</h2><p>QQ分享支持图文链接，单图，音乐和应用<br>分享代码很简单</p>
 <pre><code>mTencent.shareToQQ(this, bundle , listener);
 </code></pre><p>主要是分享类型所需要的参数bundle的构造，具体的信息看<a href="http://wiki.open.qq.com/index.php?title=Android_API%E8%B0%83%E7%94%A8%E8%AF%B4%E6%98%8E&amp;=45038" target="_blank" rel="noopener">http://wiki.open.qq.com/index.php?title=Android_API%E8%B0%83%E7%94%A8%E8%AF%B4%E6%98%8E&amp;=45038</a>里面的分享消息到QQ<br>以分享图文链接为例</p>
