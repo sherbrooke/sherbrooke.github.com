@@ -239,7 +239,7 @@
 
     
         <meta property="article:published_time" content="Tue May 01 2018 00:00:00 GMT+0800">
-        <meta property="article:modified_time" content="Wed Aug 22 2018 12:00:02 GMT+0800">
+        <meta property="article:modified_time" content="Thu Aug 23 2018 12:25:21 GMT+0800">
     
 
     <!-- The Twitter Card protocol -->
@@ -262,7 +262,7 @@
     "mainEntityOfPage": "http://sherbrooke.work/2018/05/01/微博_QQ_微信分享和登录/index.html",
     "headline": "常用第三方平台的分享以及登录",
     "datePublished": "Tue May 01 2018 00:00:00 GMT+0800",
-    "dateModified": "Wed Aug 22 2018 12:00:02 GMT+0800",
+    "dateModified": "Thu Aug 23 2018 12:25:21 GMT+0800",
     "author": {
         "@type": "Person",
         "name": "Sher",
@@ -339,6 +339,15 @@
 
     <!-- Left aligned menu below button -->
     
+    
+    <button id="post-toc-trigger-btn"
+        class="mdl-button mdl-js-button mdl-button--icon">
+        <i class="material-icons">format_list_numbered</i>
+    </button>
+
+    <ul class="post-toc-wrap mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect" for="post-toc-trigger-btn" style="max-height:80vh; overflow-y:scroll;">
+        <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#微博"><span class="post-toc-number">1.</span> <span class="post-toc-text">微博</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#微博授权"><span class="post-toc-number">1.1.</span> <span class="post-toc-text">微博授权</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#微博分享"><span class="post-toc-number">1.2.</span> <span class="post-toc-text">微博分享</span></a></li></ol></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#QQ"><span class="post-toc-number">2.</span> <span class="post-toc-text">QQ</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#QQ授权"><span class="post-toc-number">2.1.</span> <span class="post-toc-text">QQ授权</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#QQ分享"><span class="post-toc-number">2.2.</span> <span class="post-toc-text">QQ分享</span></a></li></ol></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#微信"><span class="post-toc-number">3.</span> <span class="post-toc-text">微信</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#微信授权"><span class="post-toc-number">3.1.</span> <span class="post-toc-text">微信授权</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#微信分享"><span class="post-toc-number">3.2.</span> <span class="post-toc-text">微信分享</span></a></li></ol></li></ol>
+    </ul>
     
 
 
@@ -481,7 +490,188 @@
                 <!-- Post Content -->
                 <div id="post-content" class="mdl-color-text--grey-700 mdl-card__supporting-text fade out">
     
-        <p>这里只讨论微博——QQ——微信原生的分享和登录，不使用第三方的SDK</p>
+        <p>这里只讨论微博——QQ——微信原生的分享和登录，不使用第三方的SDK<br>在使用之前，几个平台都需要完善开发者信息，需要身份证或营业执照之类的信息</p>
+<h1 id="微博"><a href="#微博" class="headerlink" title="微博"></a>微博</h1><p>首先是微博,先进入微博开放平台选择移动应用<br><img src="http://7xsnoe.com1.z0.glb.clouddn.com/blog/180822/E7bJcF07eL.png" alt="mark"><br>填写应用信息，选择平台，然后创建之后会完善一下应用信息，先填一下基本信息，重点注意包名和签名，这部分要和APP的一致。然后是高级信息里面的授权回调页和取消授权回调页也注意一下，另外如果没有通过审核的话需要测试账号才能分享和登录，所以如果有需要的话，在测试信息里面加上相关账号。<br>然后我们拿到AppId，AppSecret，回调地址</p>
+<p>在调用分享或者授权的代码之前，先要导一下包，先在根目录的gradle里面的allprojects下添加maven { url “<a href="https://dl.bintray.com/thelasterstar/maven/&quot;" target="_blank" rel="noopener">https://dl.bintray.com/thelasterstar/maven/&quot;</a> }<br>然后在module的gradle文件的依赖添加compile ‘com.sina.weibo.sdk:core:4.3.0:openDefaultRelease@aar’，然后注册一下应用</p>
+<pre><code>AuthInfo mAuthInfo = new AuthInfo(this, APP_KEY, REDIRECT_URL, &quot;&quot;);
+  WbSdk.install(this,mAuthInfo);
+</code></pre><h2 id="微博授权"><a href="#微博授权" class="headerlink" title="微博授权"></a>微博授权</h2><pre><code class="```">
+    mSsoHandler = new SsoHandler(this);
+    // SSO 授权, 仅客户端
+    mSsoHandler.authorizeClientSso(new AuthListener());
+    // SSO 授权, 仅Web
+    mSsoHandler.authorizeWeb(new WbAuthListener());
+    // SSO 授权, ALL IN ONE   如果手机安装了微博客户端则使用客户端授权,没有则进行网页授权
+    mSsoHandler.authorize(new WbAuthListener());
+
+```
+</code></pre>
+<p>WbAuthListener类需要实现微博的WbAuthListener接口，在重写的三个回调方法里面处理成功失败和取消，成功回调会直接返回Token，另外要注意的一点是在请求sso的activity必须重写onActivityResult，在这个方法里面需要调用</p>
+<pre><code>if (mSsoHandler != null) {
+       mSsoHandler.authorizeCallBack(requestCode, resultCode, data);
+   }
+</code></pre><p>有了上面的token，就可以从token里面拿到access_token和uid，从而获取用户资料，具体的接口参考<a href="http://open.weibo.com/wiki/2/users/show" target="_blank" rel="noopener">http://open.weibo.com/wiki/2/users/show</a></p>
+<h2 id="微博分享"><a href="#微博分享" class="headerlink" title="微博分享"></a>微博分享</h2><p>微博可以分享文本，单图，多图，网页（链接的形式，目前测试好像分享不出去，如果要分享链接的话，直接将链接拼接在文本后面）和视频<br><img src="http://7xsnoe.com1.z0.glb.clouddn.com/blog/180822/j3EhFdGjHl.png" alt="mark"><br>在onNewIntent方法调用的接口是用于处理回调的，记得要调用。<br>具体的构造各种类型参数的方法如下</p>
+<pre><code>/**
+ * 创建文本消息对象。
+ * @return 文本消息对象。
+ */
+private TextObject getTextObj() {
+    TextObject textObject = new TextObject();
+    textObject.text = &quot;text&quot;;
+    textObject.title = &quot;xxxx&quot;;
+    textObject.actionUrl = &quot;http://www.baidu.com&quot;;
+    return textObject;
+}
+private ImageObject getImageObj() {
+    ImageObject imageObject = new ImageObject();
+    Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
+    imageObject.setImageObject(bitmap);
+    return imageObject;
+}
+/**
+ * 创建多媒体（网页）消息对象。
+ *
+ * @return 多媒体（网页）消息对象。
+ */
+private WebpageObject getWebpageObj() {
+    WebpageObject mediaObject = new WebpageObject();
+    mediaObject.identify = Utility.generateGUID();
+    mediaObject.title =&quot;测试title&quot;;
+    mediaObject.description = &quot;测试描述&quot;;
+    Bitmap  bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
+    // 设置 Bitmap 类型的图片到视频对象里         设置缩略图。 注意：最终压缩过的缩略图大小不得超过 32kb。
+    mediaObject.setThumbImage(bitmap);
+    mediaObject.actionUrl = &quot;http://news.sina.com.cn/c/2013-10-22/021928494669.shtml&quot;;
+    mediaObject.defaultText = &quot;Webpage 默认文案&quot;;
+    return mediaObject;
+}
+
+/***
+ * 创建多图
+ * @return
+ */
+private MultiImageObject getMultiImageObject(){
+    MultiImageObject multiImageObject = new MultiImageObject();
+    //pathList设置的是本地本件的路径,并且是当前应用可以访问的路径，现在不支持网络路径（多图分享依靠微博最新版本的支持，所以当分享到低版本的微博应用时，多图分享失效
+    // 可以通过WbSdk.hasSupportMultiImage 方法判断是否支持多图分享,h5分享微博暂时不支持多图）多图分享接入程序必须有文件读写权限，否则会造成分享失败
+    ArrayList&lt;Uri&gt; pathList = new ArrayList&lt;Uri&gt;();
+    pathList.add(Uri.fromFile(new File(getExternalFilesDir(null)+&quot;/aaa.png&quot;)));
+    pathList.add(Uri.fromFile(new File(getExternalFilesDir(null)+&quot;/bbbb.jpg&quot;)));
+    pathList.add(Uri.fromFile(new File(getExternalFilesDir(null)+&quot;/ccc.JPG&quot;)));
+    pathList.add(Uri.fromFile(new File(getExternalFilesDir(null)+&quot;/ddd.jpg&quot;)));
+    pathList.add(Uri.fromFile(new File(getExternalFilesDir(null)+&quot;/fff.jpg&quot;)));
+    pathList.add(Uri.fromFile(new File(getExternalFilesDir(null)+&quot;/ggg.JPG&quot;)));
+    pathList.add(Uri.fromFile(new File(getExternalFilesDir(null)+&quot;/eee.jpg&quot;)));
+    pathList.add(Uri.fromFile(new File(getExternalFilesDir(null)+&quot;/hhhh.jpg&quot;)));
+    pathList.add(Uri.fromFile(new File(getExternalFilesDir(null)+&quot;/kkk.JPG&quot;)));
+    multiImageObject.setImageList(pathList);
+    return multiImageObject;
+}
+
+private VideoSourceObject getVideoObject(){
+    //获取视频
+    VideoSourceObject videoSourceObject = new VideoSourceObject();
+    videoSourceObject.videoPath = Uri.fromFile(new File(getExternalFilesDir(null)+&quot;/eeee.mp4&quot;));
+    return videoSourceObject;
+} 
+</code></pre><h1 id="QQ"><a href="#QQ" class="headerlink" title="QQ"></a>QQ</h1><p>和微博一样，使用之前，先在腾讯开放平台创建一下应用<br><img src="http://7xsnoe.com1.z0.glb.clouddn.com/blog/180823/kc76e6f3BB.png" alt="mark"><br>然后完善一下软件的基本信息，由于QQ登录需要提交审核或者是测试账号才能使用，所以在登录之前要生成apk提交审核。<br>完善信息之后直接保存就可以在管理中心看到刚刚创建的应用，点击这个应用可以进入应用详情界面，里面可以看到需要的AppId和AppKey。</p>
+<p>使用之前先在这<a href="http://wiki.open.qq.com/wiki/mobile/SDK%E4%B8%8B%E8%BD%BD" target="_blank" rel="noopener">http://wiki.open.qq.com/wiki/mobile/SDK%E4%B8%8B%E8%BD%BD</a> 下载一下SDK<br>首先配置一下网络权限</p>
+<pre><code>&lt;uses-permission android:name=&quot;android.permission.INTERNET&quot; /&gt;
+&lt;uses-permission android:name=&quot;android.permission.ACCESS_NETWORK_STATE&quot; /&gt;
+</code></pre><p>以及两个activity，注意要换下tencent后面的appid为自己的</p>
+<pre><code>&lt;activity
+android:name=&quot;com.tencent.tauth.AuthActivity&quot;     
+android:noHistory=&quot;true&quot; 
+android:launchMode=&quot;singleTask&quot; &gt;
+&lt;intent-filter&gt;
+&lt;action android:name=&quot;android.intent.action.VIEW&quot; /&gt;
+&lt;category android:name=&quot;android.intent.category.DEFAULT&quot; /&gt;
+&lt;category android:name=&quot;android.intent.category.BROWSABLE&quot; /&gt;
+&lt;data android:scheme=&quot;tencent你的AppId&quot; /&gt;
+&lt;/intent-filter&gt;
+&lt;/activity&gt;
+&lt;activity android:name=&quot;com.tencent.connect.common.AssistActivity&quot;
+android:theme=&quot;@android:style/Theme.Translucent.NoTitleBar&quot;
+android:configChanges=&quot;orientation|keyboardHidden|screenSize&quot; 
+</code></pre><p>/&gt;<br>另外还需要实现一下回调IUiListener接口以及在onActivityResult方法处理一下</p>
+<pre><code>Tencent.onActivityResultData(requestCode,resultCode,data,listener);
+</code></pre><h2 id="QQ授权"><a href="#QQ授权" class="headerlink" title="QQ授权"></a>QQ授权</h2><p>授权的代码很简单，this代表本上面实现的IUiListener接口</p>
+<pre><code>mTencent.login(this, &quot;all&quot;, this);
+</code></pre><p>然后在上面实现的回调类的OnComplete方法就可以根据参数拿到OpenId， AccessToken参数<br>如果要获取详细的用户信息，我们直接请求这个地址去获取<br><a href="https://graph.qq.com/user/get_user_info?access_token=***&amp;oauth_consumer_key=***&amp;openid=***，注意将token，oauth_consumer_key（自己的appid），openid换成自己的，这些可以从上面的授权里面拿到" target="_blank" rel="noopener">https://graph.qq.com/user/get_user_info?access_token=***&amp;oauth_consumer_key=***&amp;openid=***，注意将token，oauth_consumer_key（自己的appid），openid换成自己的，这些可以从上面的授权里面拿到</a></p>
+<h2 id="QQ分享"><a href="#QQ分享" class="headerlink" title="QQ分享"></a>QQ分享</h2><p>QQ分享支持图文链接，单图，音乐和应用<br>分享代码很简单</p>
+<pre><code>mTencent.shareToQQ(this, bundle , listener);
+</code></pre><p>主要是分享类型所需要的参数bundle的构造，具体的信息看<a href="http://wiki.open.qq.com/index.php?title=Android_API%E8%B0%83%E7%94%A8%E8%AF%B4%E6%98%8E&amp;=45038" target="_blank" rel="noopener">http://wiki.open.qq.com/index.php?title=Android_API%E8%B0%83%E7%94%A8%E8%AF%B4%E6%98%8E&amp;=45038</a>里面的分享消息到QQ<br>以分享图文链接为例</p>
+<pre><code> final Bundle params = new Bundle();
+params.putInt(QQShare.SHARE_TO_QQ_KEY_TYPE, QQShare.SHARE_TO_QQ_TYPE_DEFAULT);
+params.putString(QQShare.SHARE_TO_QQ_TITLE, &quot;要分享的标题&quot;);
+params.putString(QQShare.SHARE_TO_QQ_SUMMARY,  &quot;要分享的摘要&quot;);
+params.putString(QQShare.SHARE_TO_QQ_TARGET_URL,  &quot;http://www.qq.com/news/1.html&quot;);
+params.putString(QQShare.SHARE_TO_QQ_IMAGE_URL,&quot;http://imgcache.qq.com/qzone/space_item/pre/0/66768.gif&quot;);
+params.putString(QQShare.SHARE_TO_QQ_APP_NAME,  &quot;测试应用222222&quot;);
+params.putInt(QQShare.SHARE_TO_QQ_EXT_INT,  &quot;其他附加功能&quot;);        
+mTencent.shareToQQ(MainActivity.this, params, new BaseUiListener());
+</code></pre><h1 id="微信"><a href="#微信" class="headerlink" title="微信"></a>微信</h1><p>首先在微信开放平台创建应用，填写应用信息的时候注意包名和签名，都填完之后等待审核完成才能使用，注意微信登录还需要在接口列表点击申请一下，这个是需要开发者资质认证的。<br>然后我们拿到AppId和AppSecret<br>使用之前先在gradle配置一下implementation ‘com.tencent.mm.opensdk:wechat-sdk-android-without-mta:+’<br>导入对应的包，并注册一下应用</p>
+<pre><code>api = WXAPIFactory.createWXAPI(this,APP_ID,true);
+   api.registerApp(APP_ID);
+</code></pre><p>要注意的是回调必须在WXEntryActivity的oncreate方法调用</p>
+<pre><code>api.handleIntent(getIntent(),this);
+</code></pre><h2 id="微信授权"><a href="#微信授权" class="headerlink" title="微信授权"></a>微信授权</h2><p>调用代码</p>
+<pre><code>if (!api.isWXAppInstalled())
+      return;
+  final SendAuth.Req req = new SendAuth.Req();
+  req.scope=&quot;snsapi_userinfo&quot;;
+  req.state=&quot;wechat_sdk_demo_test&quot;;
+  api.sendReq(req);
+</code></pre><p>如果签名、包名以及WXEntryActivity的位置都正确的话，那么接下来授权的回调会走到WXEntryActivity的onResp方法，这里会返回给code</p>
+<pre><code>@Override
+public void onResp(BaseResp baseResp) {
+    Log.i(&quot;ssss&quot;,&quot;onResp&quot;);
+    switch (baseResp.errCode){
+        case BaseResp.ErrCode.ERR_OK:
+            if (baseResp.getType()==2){
+                //分享
+
+            }else if (baseResp.getType()==1){
+                //登录
+                String code = ((SendAuth.Resp)baseResp).code;
+}
+            break;
+        case BaseResp.ErrCode.ERR_USER_CANCEL:
+
+            break;
+        case BaseResp.ErrCode.ERR_AUTH_DENIED:
+
+            break;
+        case BaseResp.ErrCode.ERR_UNSUPPORT:
+
+            break;
+    }
+
+}
+</code></pre><p>，如果不知道code是什么，可以了解一下OAuth2协议，有了code之后，就可以向微信去获取access_token和refresh_token和openid<br>具体的请求地址是&lt;”<a href="https://api.weixin.qq.com/sns/oauth2/access_token?appid=wx4868b35061f87885&amp;secret=64020361b8ec4c99936c0e3999a9f249&amp;code=&quot;+code+&quot;&amp;grant_type=authorization_code&gt;，这里授权就算成功了，如果需要具体的用户信息可以向这个地址请求" target="_blank" rel="noopener">https://api.weixin.qq.com/sns/oauth2/access_token?appid=wx4868b35061f87885&amp;secret=64020361b8ec4c99936c0e3999a9f249&amp;code=&quot;+code+&quot;&amp;grant_type=authorization_code&gt;，这里授权就算成功了，如果需要具体的用户信息可以向这个地址请求</a><a href="https://api.weixin.qq.com/sns/userinfo?access_token=ACCESS_TOKEN&amp;openid=OPENID" target="_blank" rel="noopener">https://api.weixin.qq.com/sns/userinfo?access_token=ACCESS_TOKEN&amp;openid=OPENID</a><br>另外如果token过期还需要用专门的方法刷新token<a href="https://api.weixin.qq.com/sns/oauth2/refresh_token?appid=APPID&amp;grant_type=refresh_token&amp;refresh_token=REFRESH_TOKEN" target="_blank" rel="noopener">https://api.weixin.qq.com/sns/oauth2/refresh_token?appid=APPID&amp;grant_type=refresh_token&amp;refresh_token=REFRESH_TOKEN</a>可以获取到access_token</p>
+<h2 id="微信分享"><a href="#微信分享" class="headerlink" title="微信分享"></a>微信分享</h2><p>微信分享目前支持文字、图片、音乐、视频、网页和小程序，可以分享到好友，朋友圈和微信收藏，分别对应三种scene</p>
+<p>发送到聊天界面——WXSceneSession</p>
+<p>发送到朋友圈——WXSceneTimeline</p>
+<p>添加到微信收藏——WXSceneFavorite<br>这里以分享网页到微信好友为例</p>
+<pre><code> WXWebpageObject fileObject = new WXWebpageObject();
+    fileObject.webpageUrl =  &quot;https://www.baidu.com&quot;;
+    WXMediaMessage msg = new WXMediaMessage(fileObject);
+    msg.title = &quot;Title&quot;;                    // 小程序消息title
+    msg.description = &quot;Desc&quot;;
+    Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.ab);
+    Bitmap thumbImgNow = Bitmap.createScaledBitmap(bmp,750,500, true);
+    bmp.recycle();
+//        Bitmap thumbBmp = Bitmap.createScaledBitmap(bmp, THUMB_SIZE, THUMB_SIZE, true);
+//        bmp.recycle();
+    msg.thumbData = Util.bmpToByteArray(thumbImgNow, true);
+//        msg.setThumbImage(thumbImgNow);
+    SendMessageToWX.Req req = new SendMessageToWX.Req();
+    req.transaction = buildTransaction(&quot;webpage&quot;);
+    req.message = msg;
+    req.scene = SendMessageToWX.Req.WXSceneSession;  // 目前支持会话
+    api.sendReq(req);
+</code></pre><p>可以看到SendMessageToWX.Req的transaction指定了分享的类型，message指定了分享的内容，scene指定了分享到好友还是朋友圈。具体的参数参考<a href="https://open.weixin.qq.com/cgi-bin/showdocument?action=dir_list&amp;t=resource/res_list&amp;verify=1&amp;id=open1419317340&amp;token=&amp;lang=zh_CN" target="_blank" rel="noopener">https://open.weixin.qq.com/cgi-bin/showdocument?action=dir_list&amp;t=resource/res_list&amp;verify=1&amp;id=open1419317340&amp;token=&amp;lang=zh_CN</a></p>
 
         
     
